@@ -14,11 +14,14 @@ extern int arp_table_len;
 
 extern queue waiting_pkts;
 
-// uint16_t update_cheksum(uint16_t old)
-// {
-// 	uint16_t sum = old + 0x100; // increment checksum high byte
-// 	return (sum + (sum >> 16)); // add carry
-// }
+
+/* Incremental update of the checksum. This function works if the
+   only modification in the IP header was to decrease the TTL field by 1 */
+uint16_t recalculate_checksum(struct iphdr *ip_hdr)
+{
+	uint16_t sum = ntohs(ip_hdr->check) + 0x100;
+	return htons(sum + (sum >> 16));
+}
 
 /* Create a new packet and add it to the `waiting_pkts` queue */
 void append_packet_to_waiting_queue(packet *msg)
@@ -80,9 +83,8 @@ void manipulate_ip_packet(packet *msg, struct ether_header *eth_hdr)
     // We have now computed the `best_route`
     // Descrease TTL
     ip_hdr->ttl--;
-    // Recompute checksum (to recompute the checksum, we need to start with the `checksum` = 0)
-    ip_hdr->check = 0;
-    ip_hdr->check = ip_checksum((uint8_t *) ip_hdr, sizeof(struct iphdr));
+    // Recompute the checksum
+    ip_hdr->check = recalculate_checksum(ip_hdr);
 
     /* Now, we have to complete the src/dest MAC addresses */
     // Search the IP address in the `arp_table`

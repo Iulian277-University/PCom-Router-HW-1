@@ -1,3 +1,6 @@
+#include "skel.h"
+#include "queue.h"
+
 #ifndef _ARP_TABLE_
 #define _ARP_TABLE_
 

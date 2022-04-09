@@ -1,3 +1,5 @@
+#include "skel.h"
+
 #ifndef _RTABLE_
 #define _RTABLE_
 

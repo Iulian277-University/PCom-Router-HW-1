@@ -157,4 +157,5 @@ int parse_rtable(const char *path, struct route_table_entry *rtable);
  * */
 int parse_arp_table(const char *path, struct arp_entry *arp_table);
 
+
 #endif /* _SKEL_H_ */
