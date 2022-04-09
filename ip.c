@@ -101,11 +101,10 @@ void manipulate_ip_packet(packet *msg, struct ether_header *eth_hdr)
     }
 
     /* -- Here we have the MAC address stored in cache, we don't need to make an `arp_request` -- */
-
-    // Overwrite the dest MAC addresses (`eth_hdr->ether_dhost`)
+    // Overwrite the `dest` MAC addresses (`eth_hdr->ether_dhost`)
     memcpy(eth_hdr->ether_dhost, arp_pair->mac, MAC_LEN);
 
-    // Overwrite the src  MAC addresses (`eth_hdr->ether_shost`)
+    // Overwrite the `src` MAC addresses (`eth_hdr->ether_shost`)
     get_interface_mac(route->interface, eth_hdr->ether_shost);
 
     // Set the interface through which the packet will go

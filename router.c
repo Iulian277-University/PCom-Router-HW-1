@@ -24,7 +24,6 @@ queue waiting_pkts;
 /*
 * [TODO]
 *  		 O(log(n)) routing table
-*        Incremental checksum
 */
 
 

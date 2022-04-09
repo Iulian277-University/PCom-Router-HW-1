@@ -54,7 +54,7 @@ void send_icmp(packet *msg, int icmp_type)
         icmp_hdr_reply->un.echo.id       = icmp_hdr->un.echo.id;
         icmp_hdr_reply->un.echo.sequence = icmp_hdr->un.echo.sequence;
     }
-    else if (icmp_type == ICMP_ECHO)
+    else
     {
         icmp_hdr_reply->un.echo.id       = 0;
         icmp_hdr_reply->un.echo.sequence = 0;
