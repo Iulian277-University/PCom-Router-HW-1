@@ -88,7 +88,7 @@ void manipulate_ip_packet(packet *msg, struct ether_header *eth_hdr)
 
     /* Now, we have to complete the src/dest MAC addresses */
     // Search the IP address in the `arp_table`
-    struct arp_entry *arp_pair = get_arp_entry(arp_table, arp_table_len, ip_hdr->daddr);
+    struct arp_entry *arp_pair = get_arp_entry(arp_table, arp_table_len, route->next_hop);
     // If not found, send and `arp_request`
     if (arp_pair == NULL)
     {

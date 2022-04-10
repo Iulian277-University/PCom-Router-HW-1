@@ -12,6 +12,7 @@ void send_icmp(packet *msg, int icmp_type)
 
     // Create a new packet of type [ETH][IPv4][ICMP]
 	packet reply;
+    memset(reply.payload, 0, sizeof(reply.payload));
 
     // Set `len` and `interface` fields of the packet
 	reply.interface = msg->interface;

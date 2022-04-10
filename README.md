@@ -51,7 +51,7 @@ If the received message is an `IPv4` packet, then the following steps are done:
 # Checksum via incremental update
 Using the following function, I am able to recompute the checksum wihtout needing to recalculate it from zero.
 
-This technique can be used only when substracting one from the TTL. It's equivalent with adding 1 or 256 as appropriate to the checksum field in the packet, using one's complement addition. [[RFC documentation](https://www.rfc-editor.org/rfc/pdfrfc/rfc1141.txt.pdf)]
+This technique can be used only when substracting one from the TTL field. It's equivalent with adding 1 or 256 as appropriate to the checksum field in the packet, using one's complement addition. [[RFC documentation](https://www.rfc-editor.org/rfc/pdfrfc/rfc1141.txt.pdf)]
 
 ```c
     uint16_t recalculate_checksum(struct iphdr *ip_hdr)
