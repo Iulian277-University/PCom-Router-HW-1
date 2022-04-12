@@ -1,5 +1,6 @@
 #include "rtable.h"
 #include "constans.h"
+#include "trie.h"
 
 // General usage buffer
 extern char buff[BUFF_CAP];
@@ -48,7 +49,7 @@ struct route_table_entry *get_best_route_log(struct route_table_entry *rtable, i
 		int mid = low + (high - low) / 2;
 
 		// Found the prefix
-		if ((dest_ip & rtable[mid].prefix) == rtable[mid].prefix)
+		if ((dest_ip & rtable[mid].mask) == rtable[mid].prefix)
 		{
 			// printf("found\n");
 			// return &rtable[mid];
@@ -121,15 +122,17 @@ void print_rtable(struct route_table_entry *rtable, int rtable_len, FILE *fp)
 
 /* Helper function used for searching an entry in the routing table
    using both the linear and logarithmic search */
-void search_entry_rtable(struct route_table_entry *rtable, int rtable_len, FILE *fp)
+void search_entry_rtable(struct route_table_entry *rtable, int rtable_len, FILE *fp, struct Node *root)
 {
     // Search for an entry in the `rtable` with/without using `binary_search`
 	uint32_t dest_ip;
 	inet_pton(AF_INET, "192.168.2.0", &dest_ip);
 	inet_ntop(AF_INET, &dest_ip, buff, INET_ADDRSTRLEN);
 	printf("%s\n", buff);
-	struct route_table_entry *route     = get_best_route(rtable, rtable_len, dest_ip);
-	struct route_table_entry *route_log = get_best_route_log(rtable, rtable_len, dest_ip);
+	struct route_table_entry *route      = get_best_route(rtable, rtable_len, dest_ip);
+	// struct route_table_entry *route_log = get_best_route_log(rtable, rtable_len, dest_ip);
+	// struct route_table_entry *route_trie = get_best_route_trie(root, dest_ip);
 	print_rtable_entry(route, fp);
-	print_rtable_entry(route_log, fp);
+	// print_rtable_entry(route_trie, fp);
+	// print_rtable_entry(route_log, fp);
 }

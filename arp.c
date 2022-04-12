@@ -3,6 +3,7 @@
 #include "rtable.h"
 #include "queue.h"
 #include "constans.h"
+#include "trie.h"
 
 extern struct route_table_entry *rtable;
 extern int rtable_len;
@@ -11,6 +12,8 @@ extern struct arp_entry *arp_table;
 extern int arp_table_len;
 
 extern queue waiting_pkts;
+
+extern struct Node *root;
 
 /* This is the core function for manipulating ARP packets */
 void manipulate_arp_packet(packet *msg)
@@ -58,7 +61,8 @@ void traverse_waiting_packets(queue waiting_pkts)
 
 			// Overwrite the src  MAC addresses (`eth_hdr->ether_shost`)
 			// struct route_table_entry *route = get_best_route_log(rtable, rtable_len, ip_hdr->daddr);
-			struct route_table_entry *route = get_best_route(rtable, rtable_len, ip_hdr->daddr);
+			// struct route_table_entry *route = get_best_route(rtable, rtable_len, ip_hdr->daddr);
+			struct route_table_entry *route = get_best_route_trie(root, ip_hdr->daddr);
 			get_interface_mac(route->interface, eth_hdr->ether_shost);
 			
 			// Set the interface through which the packet will go

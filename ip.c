@@ -4,6 +4,7 @@
 #include "arp.h"
 #include "icmp.h"
 #include "queue.h"
+#include "trie.h"
 #include "constans.h"
 
 extern struct route_table_entry *rtable;
@@ -13,6 +14,8 @@ extern struct arp_entry *arp_table;
 extern int arp_table_len;
 
 extern queue waiting_pkts;
+
+extern struct Node *root;
 
 
 /* Incremental update of the checksum. This function works if the
@@ -73,7 +76,8 @@ void manipulate_ip_packet(packet *msg, struct ether_header *eth_hdr)
 
     // Find the `best_route`
     // struct route_table_entry *route = get_best_route_log(rtable, rtable_len, ip_hdr->daddr); // O(log(n))
-    struct route_table_entry *route = get_best_route(rtable, rtable_len, ip_hdr->daddr);        // O(n)
+    // struct route_table_entry *route = get_best_route(rtable, rtable_len, ip_hdr->daddr);        // O(n)
+    struct route_table_entry *route = get_best_route_trie(root, ip_hdr->daddr);
     if (route == NULL)
     {
         send_icmp(msg, ICMP_DEST_UNREACH);

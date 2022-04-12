@@ -5,6 +5,7 @@
 #include "arp.h"
 #include "icmp.h"
 #include "constans.h"
+#include "trie.h"
 
 // General usage buffer
 char buff[BUFF_CAP];
@@ -20,12 +21,8 @@ int arp_table_len;
 // Queue of `waiting_pkts` for L2 addresses (ARP replies)
 queue waiting_pkts;
 
-
-/*
-* [TODO]
-*  		 O(log(n)) routing table
-*/
-
+// Trie
+struct Node *root;
 
 int main(int argc, char *argv[])
 {
@@ -35,7 +32,7 @@ int main(int argc, char *argv[])
 	init(argc - 2, argv + 2);
 
 	// Alloc `rtable`
-	rtable = (struct route_table_entry  *) calloc(RTABLE_CAP, sizeof(struct route_table_entry));
+	rtable = (struct route_table_entry *) calloc(RTABLE_CAP, sizeof(struct route_table_entry));
 	DIE(rtable == NULL, ALLOC_ERR);
 
 	// Parse `rtable`
@@ -46,17 +43,21 @@ int main(int argc, char *argv[])
 	arp_table = (struct arp_entry *) calloc(ARP_TABLE_CAP, sizeof(struct arp_entry));
 	DIE(arp_table == NULL, ALLOC_ERR);
 
+	// Create `trie`
+	root = new_node();
+	for (int i = 0; i < rtable_len; ++i)
+		add_route_entry(root, &rtable[i]);
+
 	// Sort the `routing_table`: O(nlog(n))
-	qsort(rtable, rtable_len, sizeof(struct route_table_entry), rtable_comparator);
-	
+	// qsort(rtable, rtable_len, sizeof(struct route_table_entry), rtable_comparator);
 
 	// FILE *fp = fopen("rtable0_sorted.txt", "w");
 	// print_rtable(rtable, rtable_len, fp);
 	// fclose(fp);
-	// // return -1;
-	// search_entry_rtable(rtable, rtable_len, stdout);
 	// return -1;
 
+	// search_entry_rtable(rtable, rtable_len, stdout, root);
+	// return -1;
 
 	// Initialize the `waiting_pkts` queue
 	waiting_pkts = queue_create();
