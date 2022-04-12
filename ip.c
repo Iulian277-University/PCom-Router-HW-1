@@ -18,7 +18,7 @@ extern queue waiting_pkts;
 extern struct Node *trie;
 
 /* Incremental update of the checksum. This function works if the
-   only modification in the IP header was to decrease the TTL field by 1 */
+   only change in the IP header was to decrease the TTL field by 1 */
 uint16_t recalculate_checksum(struct iphdr *ip_hdr)
 {
 	uint16_t sum = ntohs(ip_hdr->check) + 0x100;

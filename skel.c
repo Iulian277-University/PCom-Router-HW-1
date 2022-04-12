@@ -180,7 +180,7 @@ uint16_t ip_checksum(uint8_t *data, size_t size)
 
 	// Handle any complete 32-bit blocks.
 	char* data_end = data + (size & ~3);
-	while (data!=data_end) {
+	while (data != data_end) {
 		uint32_t word;
 		memcpy(&word, data, 4);
 		acc += ntohl(word);

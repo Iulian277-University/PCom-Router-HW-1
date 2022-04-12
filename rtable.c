@@ -5,78 +5,6 @@
 // General usage buffer
 extern char buff[BUFF_CAP];
 
-/* `qsort` comparator for sorting the `routing_table`
-	Sort ascending by `prefix` and descending by `mask` */
-int rtable_comparator(const void *rtable_entry_1, const void *rtable_entry_2)
-{
-	struct route_table_entry *e1 = (struct route_table_entry *) rtable_entry_1;
-	struct route_table_entry *e2 = (struct route_table_entry *) rtable_entry_2;
-
-	// if (e1->prefix == e2->prefix)
-	// {
-	// 	if (e1->mask < e2->mask)
-	// 		return  1;
-	// 	else
-	// 		return -1;
-	// }
-	// else
-	// {
-	// 	if (e1->prefix > e2->prefix)
-	// 		return  1;
-	// 	else
-	// 		return -1;
-	// }
-
-	// return 0;
-
-	if (e1->prefix == e2->prefix)
-		return ntohl(e2->mask) - ntohl(e1->mask);
-	return ntohl(e1->prefix) - ntohl(e2->prefix);
-
-	// return ntohl(e1->prefix & e1->mask) - ntohl(e2->prefix & e2->mask);
-}
-
-/* Returns a pointer to the best matching route or NULL if there is no matching route */
-/* ~O(log(n)) time complexity */
-// [TODO]: Repair this function
-struct route_table_entry *get_best_route_log(struct route_table_entry *rtable, int rtable_len, in_addr_t dest_ip)
-{
-	int low = 0;
-	int high = rtable_len - 1;
-
-	while (low <= high)
-	{
-		int mid = low + (high - low) / 2;
-
-		// Found the prefix
-		if ((dest_ip & rtable[mid].mask) == rtable[mid].prefix)
-		{
-			// printf("found\n");
-			// return &rtable[mid];
-			// Search the most specific mask
-			uint32_t prefix = rtable[mid].prefix;
-			while(rtable[mid].prefix == prefix)
-				mid--;
-			return &rtable[mid + 1];
-		}
-		
-		if (ntohl((dest_ip & rtable[mid].mask)) < ntohl(rtable[mid].prefix))
-		{
-			// printf("here2: ");
-			// print_rtable_entry(&rtable[mid], stdout);
-			high = mid - 1;
-		}
-		else
-		{
-			// printf("here3: ");
-			// print_rtable_entry(&rtable[mid], stdout);
-			low  = mid + 1;
-		}
-	}
-
-	return NULL;
-}
-
 /* Returns a pointer to the best matching route or NULL if there is no matching route */
 /* O(n) time complexity */
 struct route_table_entry *get_best_route(struct route_table_entry *rtable, int rtable_len, in_addr_t dest_ip)
@@ -115,7 +43,6 @@ void print_rtable_entry(struct route_table_entry *entry, FILE *fp)
 /* Helper function used for printing the routing table to the given FILE pointer */
 void print_rtable(struct route_table_entry *rtable, int rtable_len, FILE *fp)
 {
-	// fprintf(fp, "--- Routing table ---\n");
 	for(int i = 0; i < rtable_len; ++i)
 		print_rtable_entry(&rtable[i], fp);
 }
@@ -130,9 +57,7 @@ void search_entry_rtable(struct route_table_entry *rtable, int rtable_len, FILE 
 	inet_ntop(AF_INET, &dest_ip, buff, INET_ADDRSTRLEN);
 	printf("%s\n", buff);
 	struct route_table_entry *route      = get_best_route(rtable, rtable_len, dest_ip);
-	// struct route_table_entry *route_log = get_best_route_log(rtable, rtable_len, dest_ip);
-	// struct route_table_entry *route_trie = get_best_route_trie(root, dest_ip);
+	struct route_table_entry *route_trie = get_best_route_trie(root, dest_ip);
 	print_rtable_entry(route, fp);
-	// print_rtable_entry(route_trie, fp);
-	// print_rtable_entry(route_log, fp);
+	print_rtable_entry(route_trie, fp);
 }

@@ -1,6 +1,6 @@
 ## Name: *Iulian-Marius Tăiatu (322CB)*
-## Solved tasks: *[TODO]*
-## Local score: *[TODO]*
+## Solved tasks: *All*
+## Local score: *110*
 ---
 
 # General presentation
@@ -46,7 +46,9 @@ If the received message is an `IPv4` packet, then the following steps are done:
 
 # Longest prefix match
 
-*[TODO]*
+- For finding the `best route`, I implemented a [Binary Trie](https://en.wikipedia.org/wiki/Trie) structure, inserting the relevant bits from each prefix. At the end of each prefix's branch, I stored a pointer to the `rtable_entry`.
+- The complexity of constructing the trie is $O(32 * ROUTING\_TABLE\_LEN)$, where $32$ means the maximum number of `relevant bits` for an IPv4 address, which means `linear` time for creating the structure.
+- For searching the best route in the trie, we need to traverse at most $32$ bits and the complexity will be $O(32)$, therefore `constant`.
 
 # Checksum via incremental update
 Using the following function, I am able to recompute the checksum wihtout needing to recalculate it from zero.

@@ -1,7 +1,7 @@
 #include "trie.h"
 #include "constans.h"
 
-/* Alloc memory for a new `trie node`, filling the pointers with NULL */
+/* Alloc memory for a new `trie node`, setting the pointers to NULL */
 struct Node *new_node()
 {
     struct Node *node = (struct Node *) calloc(1, sizeof(struct Node));
