@@ -14,6 +14,9 @@ char buff[BUFF_CAP];
 struct route_table_entry *rtable;
 int rtable_len;
 
+// Trie
+struct Node *trie;
+
 // ARP table
 struct arp_entry *arp_table;
 int arp_table_len;
@@ -21,8 +24,6 @@ int arp_table_len;
 // Queue of `waiting_pkts` for L2 addresses (ARP replies)
 queue waiting_pkts;
 
-// Trie
-struct Node *root;
 
 int main(int argc, char *argv[])
 {
@@ -31,33 +32,22 @@ int main(int argc, char *argv[])
 	int rc;
 	init(argc - 2, argv + 2);
 
-	// Alloc `rtable`
+	// Alloc the `rtable`
 	rtable = (struct route_table_entry *) calloc(RTABLE_CAP, sizeof(struct route_table_entry));
 	DIE(rtable == NULL, ALLOC_ERR);
 
-	// Parse `rtable`
+	// Parse the `rtable`
 	rtable_len  = parse_rtable(argv[1], rtable);
 	DIE(rtable_len  < 1, PARSE_ERR);
 
-	// Alloc `arp_table`
+	// Alloc the `arp_table`
 	arp_table = (struct arp_entry *) calloc(ARP_TABLE_CAP, sizeof(struct arp_entry));
 	DIE(arp_table == NULL, ALLOC_ERR);
 
-	// Create `trie`
-	root = new_node();
+	// Create the `trie` structure
+	trie = new_node();
 	for (int i = 0; i < rtable_len; ++i)
-		add_route_entry(root, &rtable[i]);
-
-	// Sort the `routing_table`: O(nlog(n))
-	// qsort(rtable, rtable_len, sizeof(struct route_table_entry), rtable_comparator);
-
-	// FILE *fp = fopen("rtable0_sorted.txt", "w");
-	// print_rtable(rtable, rtable_len, fp);
-	// fclose(fp);
-	// return -1;
-
-	// search_entry_rtable(rtable, rtable_len, stdout, root);
-	// return -1;
+		insert_rtable_entry(trie, &rtable[i]);
 
 	// Initialize the `waiting_pkts` queue
 	waiting_pkts = queue_create();
@@ -87,5 +77,6 @@ int main(int argc, char *argv[])
 	// Release the memory
 	free(rtable);
 	free(arp_table);
+	free_trie(trie);
 	return 0;
 }

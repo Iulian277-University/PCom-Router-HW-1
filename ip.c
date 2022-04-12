@@ -15,8 +15,7 @@ extern int arp_table_len;
 
 extern queue waiting_pkts;
 
-extern struct Node *root;
-
+extern struct Node *trie;
 
 /* Incremental update of the checksum. This function works if the
    only modification in the IP header was to decrease the TTL field by 1 */
@@ -75,9 +74,7 @@ void manipulate_ip_packet(packet *msg, struct ether_header *eth_hdr)
     }
 
     // Find the `best_route`
-    // struct route_table_entry *route = get_best_route_log(rtable, rtable_len, ip_hdr->daddr); // O(log(n))
-    // struct route_table_entry *route = get_best_route(rtable, rtable_len, ip_hdr->daddr);        // O(n)
-    struct route_table_entry *route = get_best_route_trie(root, ip_hdr->daddr);
+    struct route_table_entry *route = get_best_route_trie(trie, ip_hdr->daddr);
     if (route == NULL)
     {
         send_icmp(msg, ICMP_DEST_UNREACH);

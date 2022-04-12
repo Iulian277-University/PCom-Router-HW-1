@@ -1,5 +1,5 @@
 PROJECT=router
-SOURCES=router.c queue.c list.c skel.c rtable.c ip.c arp.c icmp.c trie.c
+SOURCES=router.c queue.c list.c skel.c rtable.c trie.c ip.c arp.c icmp.c
 LIBRARY=nope
 INCPATHS=include
 LIBPATHS=.

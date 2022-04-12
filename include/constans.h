@@ -14,6 +14,7 @@
 #define IPV4_ID      25
 
 /* */
+#define IPV4_ADDR_LEN 32
 #define IPV4_LEN 4
 #define MAC_LEN  6
 
@@ -32,7 +33,5 @@
 
 /* ARP table */
 #define ARP_TABLE_CAP 100
-#define ARP_TABLE_FILE_PATH "arp_table.txt"
-
 
 #endif

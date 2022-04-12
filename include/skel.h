@@ -34,6 +34,9 @@
 #define MAX_LEN 1600
 #define ROUTER_NUM_INTERFACES 3
 
+#define MAX(x, y) (((x) > (y)) ? (x) : (y))
+#define MIN(x, y) (((x) < (y)) ? (x) : (y))
+
 #define DIE(condition, message) \
 	do { \
 		if ((condition)) { \

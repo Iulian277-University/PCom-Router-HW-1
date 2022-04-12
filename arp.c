@@ -13,7 +13,7 @@ extern int arp_table_len;
 
 extern queue waiting_pkts;
 
-extern struct Node *root;
+extern struct Node *trie;
 
 /* This is the core function for manipulating ARP packets */
 void manipulate_arp_packet(packet *msg)
@@ -60,9 +60,7 @@ void traverse_waiting_packets(queue waiting_pkts)
 			memcpy(eth_hdr->ether_dhost, arp_pair->mac, MAC_LEN);
 
 			// Overwrite the src  MAC addresses (`eth_hdr->ether_shost`)
-			// struct route_table_entry *route = get_best_route_log(rtable, rtable_len, ip_hdr->daddr);
-			// struct route_table_entry *route = get_best_route(rtable, rtable_len, ip_hdr->daddr);
-			struct route_table_entry *route = get_best_route_trie(root, ip_hdr->daddr);
+			struct route_table_entry *route = get_best_route_trie(trie, ip_hdr->daddr);
 			get_interface_mac(route->interface, eth_hdr->ether_shost);
 			
 			// Set the interface through which the packet will go
