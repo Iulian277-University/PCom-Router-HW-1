@@ -1,6 +1,4 @@
 ## Name: *Iulian-Marius Tăiatu (322CB)*
-## Solved tasks: *All*
-## Local score: *110*
 ---
 
 # General presentation
